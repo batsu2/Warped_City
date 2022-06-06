@@ -44,20 +44,14 @@ public class Map
     static int BOXBANNER = 0xC1FFF5;
 
     Sound pistolSound = Gdx.audio.newSound(Gdx.files.internal("data/plasma_pistol.ogg"));
-    //Sound casingDropSound = Gdx.audio.newSound(Gdx.files.internal("data/casing_drop.ogg"));
     Sound overheatSound = Gdx.audio.newSound(Gdx.files.internal("data/overheat.ogg"));
     Sound laserShotSound = Gdx.audio.newSound(Gdx.files.internal("data/laser-shot.ogg"));
-    //Sound shotWallHitSound = Gdx.audio.newSound(Gdx.files.internal("data/projectile-hit.ogg"));
-    //Sound pauseOnSound = Gdx.audio.newSound(Gdx.files.internal("data/pauseon.ogg"));
-    //Sound pauseOffSound = Gdx.audio.newSound(Gdx.files.internal("data/pauseoff.ogg"));
-    //public static Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("data/death.mp3"));
 
 
     public int[][] tiles;
     public Player alita;
     public float shotDelay = 0.0f;
     public float enReloadDelay = 0.0f;
-    //public float enemyShotDelay = 0.0f;
     Array<Dispenser> dispensers = new Array<>();
     public Array<Bullet> bullets = new Array<>();
     public Array<Drone> drones = new Array<>();
@@ -176,35 +170,10 @@ public class Map
                     BannerNeon neonBanner = new BannerNeon(this, x, pixmap.getHeight() - 1 - y, 1, 2);
                     props.add(neonBanner);
                 }
-                //else if(match(pix, SPIKES))
-                //{
-                    //Spike spike = new Spike(x, pixmap.getHeight() - 1 - y);
-                    //spikes.add(spike);
-                //}
-                //else if (match(pix, ROCKET))
-                //{
-                   // Rocket rocket = new Rocket(this, x, pixmap.getHeight() - 1 - y);
-                    //rockets.add(rocket);
-               // }
-                //else if (match(pix, MOVING_SPIKES))
-                //{
-                    //movingSpikes.add(new MovingSpikes(this, x, pixmap.getHeight() - 1 - y));
-                //}
-                //else if (match(pix, LASER))
-                //{
-                    //lasers.add(new Laser(this, x, pixmap.getHeight() - 1 - y));
-                //}
-                /*else if (match(pix, END))
-                {
-                    exit = new Exit(x, pixmap.getHeight() - 1 - y);
-                    exits.add(exit);
-                }*/
                 else if(match(pix, LADDERS))
                 {
                     Ladder ladder = new Ladder(x, pixmap.getHeight() - 1 - y);
                     ladders.add(ladder);
-
-                    //ladders[x][y] = pix;
                 }
                 else if(match(pix, LADDER_END))
                 {
@@ -217,26 +186,8 @@ public class Map
                 }
             }
         }
-
-        /*for (int i = 0; i < grunts.size; i++)
-        {
-            grunts.get(i).init();
-        }
-
-
-        for (int i = 0; i < cacties.size; i++)
-        {
-            cacties.get(i).init();
-        }
-
-        for (int i = 0; i < tanks.size; i++)
-        {
-            tanks.get(i).init();
-        }*/
-        for (int i = 0; i < drones.size; i++)
-        {
-            drones.get(i).init();
-        }
+        
+        
     }
 
     boolean match (int src, int dst)
@@ -316,31 +267,11 @@ public class Map
 
 
 
-            //if (alita.state == alita.JUMP || alita.state == alita.JUMP_SHOOT)
-            //{
-               /* if ((alita.state == alita.JUMP_SHOOT) && alita.dir == alita.RIGHT)
-                {
-                    Bullet bullet = new Bullet(this, alita.pos.x + 2.1f, alita.pos.y + 0.5f, alita.RIGHT);
-                    bullets.add(bullet);
-
-                    shotDelay = 0.1f;
-                    alita.state = alita.JUMP;
-                }
-                else if ((alita.state == alita.JUMP_SHOOT) && alita.dir == alita.LEFT) {
-                    Bullet bullet = new Bullet(this, alita.pos.x, alita.pos.y + 0.5f, alita.LEFT);
-                    bullets.add(bullet);
-
-                    shotDelay = 0.1f;
-                    alita.state = alita.JUMP;
-
-                }*/
-            //}
-
             if ( (Player.state == Player.SHOOT || Player.state == Player.RUN_SHOOT || Player.state == Player.JUMP_SHOOT)
                     && alita.dir == Player.RIGHT  && alita.energy > 0)
             {
                 pistolSound.play(0.2f);
-                //casingDropSound.play(0.2f);
+                
                 Bullet bullet = new Bullet(this, alita.pos.x + 2.1f, alita.pos.y + 1.4f, Player.RIGHT);
                 bullets.add(bullet);
 
@@ -365,7 +296,7 @@ public class Map
                     && alita.dir == Player.LEFT  && alita.energy > 0)
             {
                 pistolSound.play(0.2f);
-                //casingDropSound.play(0.2f);
+                
                 Bullet bullet = new Bullet(this, alita.pos.x, alita.pos.y + 1.4f, Player.LEFT);
                 bullets.add(bullet);
 
@@ -402,289 +333,7 @@ public class Map
         }
 
 
-
-        for (int i = 0; i < eggTurrets.size; i++)
-        {
-            if (eggTurrets.get(i).dir == EggTurret.LEFT && eggTurrets.get(i).state != EggTurret.EXPLODING)
-            {
-                if(eggTurrets.get(i).shotRangeLeft.overlaps(alita.bounds) )
-                    eggTurrets.get(i).state = EggTurret.SHOOT;
-                else
-                    eggTurrets.get(i).state = EggTurret.IDLE;
-            }
-            else if (eggTurrets.get(i).dir == EggTurret.RIGHT && eggTurrets.get(i).state != EggTurret.EXPLODING)
-            {
-                if(eggTurrets.get(i).shotRangeRight.overlaps(alita.bounds) )
-                    eggTurrets.get(i).state = EggTurret.SHOOT;
-                else
-                    eggTurrets.get(i).state = EggTurret.IDLE;
-            }
-
-
-
-
-            if(eggTurrets.get(i).enemyShotDelay <= 0 && eggTurrets.get(i).active)
-            {
-
-                if (eggTurrets.get(i).state == EggTurret.SHOOT && eggTurrets.get(i).dir == EggTurret.LEFT)
-                {
-                    laserShotSound.play(0.2f);
-
-                    EnemyBullet enemyBullet = new EnemyBullet(this, eggTurrets.get(i).pos.x, eggTurrets.get(i).pos.y + 0.6f, EggTurret.LEFT);
-                    enemyBullets.add(enemyBullet);
-
-                    eggTurrets.get(i).enemyShotDelay = 1.0f;
-                }
-                else if (eggTurrets.get(i).state == EggTurret.SHOOT && eggTurrets.get(i).dir == EggTurret.RIGHT)
-                {
-                    laserShotSound.play(0.2f);
-
-                    EnemyBullet enemyBullet = new EnemyBullet(this, eggTurrets.get(i).pos.x, eggTurrets.get(i).pos.y + 0.6f, EggTurret.RIGHT);
-                    enemyBullets.add(enemyBullet);
-
-                    eggTurrets.get(i).enemyShotDelay = 1.0f;
-                }
-
-            }
-            else
-            {
-                eggTurrets.get(i).enemyShotDelay -= deltaTime;
-            }
-        }
-
-        /*//Update coins
-        for( int i = 0; i < coins.size; i++)
-        {
-            if(alita.bounds.overlaps(coins.get(i).bounds))
-            {
-                if(coins.get(i).active && !coins.get(i).grabbing)
-                {
-                    coins.get(i).grabbing = true;
-                    alita.heldCoins++;
-                    coinSound.play(1.0f);
-                }
-            }
-        }
-
-        //Check for spike collision
-        for( int i = 0; i < spikes.size; i++)
-        {
-                //Spike kills
-                if (spikes.get(i).active)
-                {
-                    if (alita.bounds.overlaps(spikes.get(i).bounds))
-                    {
-                        if (alita.state != Player.DYING)
-                        {
-                            deathSound.play(0.3f);
-                            alita.health=0;
-                            alita.lives--;
-                            alita.vel.y = 8;
-
-                            coinReset();
-
-                            alita.state = Player.DYING;
-                            alita.stateTime = 0;
-                        }
-                    }
-                }
-        }
-
-
-
-        //Check for slime death
-        for( int i = 0; i < slimes.size; i++)
-        {
-            if(alita.state != Alita.DYING)
-            {
-                if (alita.hitBox.overlaps(slimes.get(i).bounds))
-                {
-                    if (slimes.get(i).active)
-                    {
-                        popSound.play(0.3f);
-                        slimes.get(i).active = false;
-                        alita.vel.y = 7;
-                    }
-                }
-
-                //If slime kills
-                if (slimes.get(i).active)
-                {
-                    if (alita.bounds.overlaps(slimes.get(i).bounds) && alita.health == 1)
-                    {
-                        if (alita.state != Alita.DYING)
-                        {
-                            deathSound.play(0.3f);
-                            alita.health--;
-                            alita.lives--;
-                            alita.vel.y = 9;
-                            alita.vel.x = -(alita.vel.x+3);
-
-                            coinReset();
-
-                            alita.state = Alita.DYING;
-                            alita.stateTime = 0;
-                        }
-                    }
-                    else if(alita.bounds.overlaps(slimes.get(i).bounds) && alita.health > 1)
-                    {
-                        deathSound.play(0.3f);
-
-                        alita.health--;
-                        alita.vel.y = 9;
-                        alita.vel.x = -(alita.vel.x+3);
-                    }
-                }
-            }
-        }
-
-        //Check for grunt death
-        for( int i = 0; i < grunts.size; i++)
-        {
-            if(alita.state != Alita.DYING)
-            {
-                if (alita.hitBox.overlaps(grunts.get(i).bounds))
-                {
-                    if (grunts.get(i).active)
-                    {
-                        popSound.play(0.3f);
-                        grunts.get(i).active = false;
-                        alita.vel.y = 7;
-                    }
-                }
-
-                //Grunt kills
-                if (grunts.get(i).active)
-                {
-                    if (alita.bounds.overlaps(grunts.get(i).bounds) && alita.health == 1)
-                    {
-                        if (alita.state != Alita.DYING)
-                        {
-                            deathSound.play(0.3f);
-                            alita.health--;
-                            alita.lives--;
-                            alita.vel.y = 9;
-                            alita.vel.x = -(alita.vel.x+3);
-
-                            coinReset();
-
-                            alita.state = Alita.DYING;
-                            alita.stateTime = 0;
-                        }
-                    }
-                    else if(alita.bounds.overlaps(grunts.get(i).bounds) && alita.health > 1)
-                    {
-                        deathSound.play(0.3f);
-
-                        alita.health--;
-                        alita.vel.y = 9;
-                        alita.vel.x = -(alita.vel.x+3);
-                    }
-                }
-            }
-        }
-
-
-        //Check for Cactie death
-        for( int i = 0; i < cacties.size; i++)
-        {
-            if(alita.state != Alita.DYING)
-            {
-                if (alita.hitBox.overlaps(cacties.get(i).bounds))
-                {
-                    if (cacties.get(i).active && cacties.get(i).health == 1)
-                    {
-                        popSound.play(0.3f);
-                        cacties.get(i).active = false;
-                        alita.vel.y = 7;
-                    }
-                    else if (cacties.get(i).active && cacties.get(i).health > 1)
-                    {
-                        popSound.play(0.3f);
-                        cacties.get(i).health--;
-                        alita.vel.y = 12;
-                    }
-                }
-
-                //Cactie kills
-                /*if (cacties.get(i).active)
-                {
-                    if (alita.bounds.overlaps(cacties.get(i).bounds))
-                    {
-                        if (alita.state != Alita.DYING)
-                        {
-                            deathSound.play(0.3f);
-
-                            coinReset();
-
-                            alita.state = Alita.DYING;
-                            alita.stateTime = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        //Check for tank death
-        for( int i = 0; i < tanks.size; i++)
-        {
-            if(alita.state != Alita.DYING)
-            {
-                if (alita.hitBox.overlaps(tanks.get(i).bounds))
-                {
-                    if (tanks.get(i).active)
-                    {
-                        popSound.play(0.3f);
-
-                        tanks.get(i).active = false;
-
-                        alita.vel.y = 7;
-                    }
-                }
-
-                //Tank kills
-                if (alita.bounds.overlaps(tanks.get(i).bounds) && alita.health == 1)
-                {
-                    if (alita.state != Alita.DYING)
-                    {
-                        deathSound.play(0.3f);
-                        alita.health--;
-                        alita.lives--;
-                        alita.vel.y = 9;
-                        alita.vel.x = -(alita.vel.x+6);
-
-                        coinReset();
-
-                        alita.state = Alita.DYING;
-                        alita.stateTime = 0;
-                    }
-                }
-                else if(alita.bounds.overlaps(tanks.get(i).bounds) && alita.health > 1)
-                {
-                    deathSound.play(0.3f);
-
-                    alita.health--;
-                    alita.vel.y = 9;
-                    alita.vel.x = -(alita.vel.x+3);
-                }
-            }
-        }
-
-        /*for( int i = 0; i < spikes.size; i++)
-        {
-            if(alita.bounds.overlaps(spikes.get(i).bounds))
-            {
-                alita.state = Alita.DYING;
-            }
-        }*/
-
-        //for (int i = 0; i < rockets.size; i++)
-        //{
-           // Rocket rocket = rockets.get(i);
-            //rocket.update(deltaTime);
-       // }
-        //
-        // */
+        
 
         if(!Pause)
         {
@@ -701,60 +350,14 @@ public class Map
                 powerUp.update(deltaTime);
             }
 
-            for (int i = 0; i < eggTurrets.size; i++)
-            {
-                EggTurret eggTurret = eggTurrets.get(i);
-                eggTurret.update(deltaTime);
-            }
-
-            for (int i = 0; i < enemyBullets.size; i++)
-            {
-                EnemyBullet enemyBullet = enemyBullets.get(i);
-                enemyBullet.update(deltaTime);
-            }
-
-            for (int i = 0; i < drones.size; i++)
-            {
-                Drone drone = drones.get(i);
-                drone.update(deltaTime);
-            }
-
+          
+            //Update all Props
             for (int i = 0; i < props.size; i++)
             {
                 Prop prop = props.get(i);
                 prop.update(deltaTime);
             }
-
-
-
-            /*for (int i = 0; i < tanks.size; i++)
-            {
-                if (tanks.get(i).active)
-                {
-                    Tank tank = tanks.get(i);
-                    tank.update(deltaTime);
-                }
-            }*/
-        }
-        //for (int i = 0; i < lasers.size; i++)
-       // {
-        //    lasers.get(i).update();
-       // }
-    }
-
-
-
-
-    /*public void coinReset()
-    {
-        for(int j = 0; j < coins.size; j++)
-        {
-            coins.get(j).active = true;
         }
     }
 
-    public boolean isDeadly (int tileId)
-    {
-        return tileId == SPIKES || tileId == SLIMES || tileId == GRUNTS;
-    }*/
 }
