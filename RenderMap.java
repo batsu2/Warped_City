@@ -33,7 +33,6 @@ public class RenderMap extends Map
     OrthographicCamera cam;
     SpriteCache cache;
     SpriteBatch batch = new SpriteBatch(5460);
-    //ImmediateModeRenderer20 renderer = new ImmediateModeRenderer20(false, true, 0);
     int[][] blocks;
     TextureRegion tile;
     TextureRegion tileTop;
@@ -41,8 +40,6 @@ public class RenderMap extends Map
 
 
     Music music;
-
-    //Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump1.wav"));
 
     Animation<TextureRegion> playerLeft;
     Animation<TextureRegion> playerRight;
@@ -72,7 +69,6 @@ public class RenderMap extends Map
     Animation<TextureRegion> eggTurretShootLeftAnim;
     Animation<TextureRegion> eggTurretShootRightAnim;
     Animation<TextureRegion> explosionAnim;
-    //Animation<TextureRegion> missileExplosion;
     TextureRegion dispenser;
     Animation<TextureRegion> spawn;
     Animation<TextureRegion> dying;
@@ -92,23 +88,11 @@ public class RenderMap extends Map
     Animation<TextureRegion> sideSignAnim;
     Animation<TextureRegion> scrollSignAnim;
     Animation<TextureRegion> neonBannerAnim;
-    //Animation<TextureRegion> spikes;
-    //TextureRegion spikes;
-    //TextureRegion missile;
-    //TextureRegion plantA;
+    
     TextureRegion building;
-    //TextureRegion rocketPad;
-    //Animation<TextureRegion> exits;
-    //TextureRegion laser;
     FPSLogger fps = new FPSLogger();
 
 
-
-    //Controller controller = null;
-
-    //public static boolean backJumpFlag = false;
-
-    //Sound explosionSound = Gdx.audio.newSound(Gdx.files.internal("data/explosion.wav"));
 
 
     public RenderMap (Map map)
@@ -126,105 +110,14 @@ public class RenderMap extends Map
         this.cache = new SpriteCache(this.map.tiles.length * this.map.tiles[0].length, false);
         this.blocks = new int[(int)Math.ceil(this.map.tiles.length / 24.0f)][(int)Math.ceil(this.map.tiles[0].length / 16.0f)];
 
+        //Start Music
         music = Gdx.audio.newMusic(Gdx.files.internal("data/city-ambiance.wav"));
         music.play();
         music.setLooping(true);
         music.setVolume(0.8f);
 
         createAnimations();
-        createBlocks();
 
-    }
-
-
-
-
-    private void createBlocks ()
-    {
-        int width = map.tiles.length;
-        int height = map.tiles[0].length;
-
-        for (int blockY = 0; blockY < blocks[0].length; blockY++)
-        {
-            for (int blockX = 0; blockX < blocks.length; blockX++)
-            {
-                cache.beginCache();
-
-                for (int x = blockX * 24; x < blockX * 24 + 24; x++)
-                {//int y = blockY * 16; y < blockY * 16 + 16; y++
-                    for (int y = blockY * 16; y < blockY * 16 + 16; y++)
-                    {
-                        if (x > width)
-                            continue;
-
-                        if (y > height)
-                            continue;
-
-                        int posX = x;
-                        int posY = height - y - 1;
-
-                        if ((map.match(map.tiles[x][y], Map.TILE)) && y >= 1 && (map.match(map.tiles[x][y - 1], Map.TILE)) )
-                        {
-                            cache.add(tile, posX, posY, 1, 1);
-                        }
-                        else if ((map.match(map.tiles[x][y], Map.TILE)) && y >= 1 && (!map.match(map.tiles[x][y + 1], Map.TILE)) )
-                        {
-                            cache.add(tileBrick, posX, posY, 1, 1);
-                        }
-                        else if(map.match(map.tiles[x][y], Map.TILE))
-                        {
-                            cache.add(tileTop, posX, posY, 1, 1);
-                        }
-
-                        //if (map.match(map.tiles[x][y], Map.SPIKES))
-                            //cache.add(spikes, posX, posY, 1, 1);
-                    }
-                }
-
-                blocks[blockX][blockY] = cache.endCache();
-
-               // if(blocks[blockX][blockY-1] != Map.TILE)
-                //{
-                    //this.tile = new TextureRegion(new Texture(Gdx.files.internal("data/arcade_platformerV2.png")), 32, 96, 16, 16);
-
-                //}
-            }
-        }
-
-        Gdx.app.debug("Project_Alpha", "blocks created");
-    }
-
-
-    public int firstIndex(int arr[][])
-    {
-        for (int i = 0; i < this.map.tiles.length; i++)
-        {
-            for (int j = 0; j < this.map.tiles[i].length; j++)
-            {
-                if (this.map.tiles[i][j] == arr[i][j])
-                {
-                    return i;
-                }
-            }
-        }
-
-        return 0;
-    }
-
-    public int secondIndex(int arr[][])
-    {
-        for (int i = 0; i < this.map.tiles.length; i++)
-        {
-            for (int j = 0; j < this.map.tiles[i].length; j++)
-            {
-                if (this.map.tiles[i][j] == arr[i][j])
-                {
-                    return j;
-                }
-            }
-        }
-
-        return 0;
     }
 
 
@@ -238,7 +131,6 @@ public class RenderMap extends Map
         this.tileBrick = new TextureRegion(new Texture(Gdx.files.internal("data/tileset.png")), 336, 16, 16, 16);
 
         this.building = new TextureRegion(new Texture(Gdx.files.internal("data/warpedCityBuilding2.png")), 23, 10, 335, 460);
-        //this.tile = new TextureRegion(new Texture(Gdx.files.internal("data/tile.png")), 0, 0, 20, 20);
 
         //Grab main character sprites
 
@@ -275,6 +167,8 @@ public class RenderMap extends Map
 
 
         //Setting up Splits
+        
+        //Player
         TextureRegion[] split1 = new TextureRegion(playerTexture).split(71, 67)[0];
         TextureRegion[] mirror1 = new TextureRegion(playerTexture).split(71, 67)[0];
 
@@ -310,6 +204,7 @@ public class RenderMap extends Map
         TextureRegion[] splitShotHit = new TextureRegion(shotHitTexture).split(15, 11)[0];
         TextureRegion[] mirrorShotHit = new TextureRegion(shotHitTexture).split(15, 11)[0];
 
+        //Enemies
         TextureRegion[] splitDrone = new TextureRegion(droneTexture).split(55, 52)[0];
         TextureRegion[] mirrorDrone = new TextureRegion(droneTexture).split(55, 52)[0];
 
@@ -321,10 +216,12 @@ public class RenderMap extends Map
 
         TextureRegion[] splitEnemyBullet = new TextureRegion(enemyBulletTexture).split(12,12)[0];
 
+        //Effects & Items
         TextureRegion[] splitExplosion = new TextureRegion(explosionTexture).split(55, 52)[0];
 
         TextureRegion[] splitPowerUp = new TextureRegion(powerUp).split(23, 21)[0];
 
+        //Props
         TextureRegion[] splitBigBanner = new TextureRegion(bigBannerTexture).split(35, 92)[0];
         TextureRegion[] splitMonitor = new TextureRegion(monitorTexture).split(21, 18)[0];
         TextureRegion[] splitCokeSign = new TextureRegion(cokeSignTexture).split(27, 78)[0];
@@ -384,24 +281,19 @@ public class RenderMap extends Map
             region.flip(true, false);
 
 
-        //this.tile = new TextureRegion(new Texture(Gdx.files.internal("data/tile.png")), 0, 0, 20, 20);
-
 
 
         //Set animation frames using splits
 
+        //Player
         playerIdleRight = new Animation(0.1f, split1[0], split1[1], split1[2], split1[3]);
         playerIdleLeft = new Animation(0.1f, mirror1[0], mirror1[1], mirror1[2], mirror1[3]);
 
         playerJumpRight = new Animation(0.2f, splitJump[0], splitJump[1], splitJump[2], splitJump[3], splitJump[3]);
         playerJumpLeft = new Animation(0.2f, mirrorJump[0], mirrorJump[1], mirrorJump[2], mirrorJump[3], mirrorJump[3]);
 
-        playerBackJumpRight = new Animation(0.1f, splitBackJump[1], splitBackJump[2], splitBackJump[3],
-                splitBackJump[4]);
-                // splitBackJump[5], splitBackJump[6]);
-        playerBackJumpLeft = new Animation(0.1f, mirrorBackJump[1], mirrorBackJump[2], mirrorBackJump[3],
-                                                    mirrorBackJump[4]);
-                                                    // mirrorBackJump[5], mirrorBackJump[6]);
+        playerBackJumpRight = new Animation(0.1f, splitBackJump[1], splitBackJump[2], splitBackJump[3], splitBackJump[4]);
+        playerBackJumpLeft = new Animation(0.1f, mirrorBackJump[1], mirrorBackJump[2], mirrorBackJump[3], mirrorBackJump[4]);
 
 
         playerJumpShootRight = new Animation(0.1f, splitJump[3], splitJump[3]);
@@ -442,6 +334,8 @@ public class RenderMap extends Map
         shotHitRight = new Animation(0.1f, splitShotHit[0], splitShotHit[1], splitShotHit[2], splitShotHit[3]);
         shotHitLeft = new Animation(0.1f, mirrorShotHit[0], mirrorShotHit[1], mirrorShotHit[2], mirrorShotHit[3]);
 
+
+        //Enemies
         enemyShotAnim = new Animation(0.1f, splitEnemyBullet[0], splitEnemyBullet[1], splitEnemyBullet[2]);
 
         droneAnim = new Animation(0.1f, splitDrone[0], splitDrone[1], splitDrone[2], splitDrone[3], splitDrone[4]);
@@ -453,6 +347,8 @@ public class RenderMap extends Map
         eggTurretShootLeftAnim = new Animation(0.1f, splitEggTurretShoot[0], splitEggTurretShoot[1], splitEggTurretShoot[2], splitEggTurretShoot[3]);
         eggTurretShootRightAnim = new Animation(0.1f, mirrorEggTurretShoot[0], mirrorEggTurretShoot[1], mirrorEggTurretShoot[2], mirrorEggTurretShoot[3]);
 
+
+        //Effects & Items
         explosionAnim = new Animation(0.1f, splitExplosion[0], splitExplosion[1], splitExplosion[2],
                 splitExplosion[3], splitExplosion[4], splitExplosion[5], splitExplosion[6]);
 
@@ -471,15 +367,6 @@ public class RenderMap extends Map
         bigBannerMonitorAnim = new Animation(0.1f, splitBigBannerMonitor[0], splitBigBannerMonitor[1], splitBigBannerMonitor[2], splitBigBannerMonitor[3]);
         boxBannerAnim = new Animation(0.1f, splitBoxBanner[0], splitBoxBanner[1], splitBoxBanner[2], splitBoxBanner[3]);
 
-
-        spawn = new Animation(0.1f, split1[1], split1[2], split1[0]);
-        dying = new Animation(0.1f, split1[2], split1[2]);
-
-
-        /*missileExplosion = new Animation(0.1f, splitMissileExplosion[0], splitMissileExplosion[1],
-            splitMissileExplosion[2], splitMissileExplosion[3], splitMissileExplosion[4], splitMissileExplosion[5]);
-
-        exits = new Animation(0.1f, splitEnd[8], splitEnd[9]);*/
     }
 
 
@@ -522,12 +409,6 @@ public class RenderMap extends Map
         stateTime += deltaTime;
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
-        //renderDispensers();
-        //renderCoins();
-
-        //if (map.exit != null)
-            //batch.draw(exits.getKeyFrame(map.alita.stateTime, true), map.exit.bounds.x, map.exit.bounds.y, 1, 1);
-
 
 
         //Render Assets
@@ -536,15 +417,16 @@ public class RenderMap extends Map
         renderDrone();
         renderEggTurret();
         renderEnemyBullet();
-        renderPowerUp();
-        renderAlita();
+        renderPlayer();
         renderBullet();
         batch.end();
 
         fps.log();
     }
 
-    private void renderAlita ()
+
+
+    private void renderPlayer ()
     {
         Animation<TextureRegion> anim = null;
         boolean loop = true;
@@ -674,8 +556,6 @@ public class RenderMap extends Map
                 break;
         }
 
-        //if(anim.isAnimationFinished(map.alita.stateTime))
-        //{
 
 
         if(Player.state == Player.BACK_JUMP)
@@ -688,8 +568,6 @@ public class RenderMap extends Map
             batch.draw(anim.getKeyFrame(stateTime, loop), map.alita.pos.x, map.alita.pos.y, 3, 3);
             bjAnimTime = 0.0f;
         }
-            //batch.draw(anim.getKeyFrame(stateTime, loop), map.alita.pos.x, map.alita.pos.y, 3, 3);
-        //}
     }
 
 
@@ -723,114 +601,13 @@ public class RenderMap extends Map
 
 
                 batch.draw(frame, bullet.pos.x, bullet.pos.y, 1, 1);
-
-                //explosionSound.play(0.5f);
-            }
-        }
-    }
-
-
-    private void renderPowerUp()
-    {
-        for (int i = 0; i < map.powerUps.size; i++)
-        {
-            PowerUp powerUp = map.powerUps.get(i);
-
-            if(map.powerUps.get(i).active)
-            {
-                TextureRegion frame = this.powerUpAnim.getKeyFrame(powerUp.stateTime, true);
-                batch.draw(frame, powerUp.pos.x - 0.5f, powerUp.pos.y - 0.5f, 1, 1);
-            }
-        }
-    }
-
-
-    private void renderEnemyBullet()
-    {
-        for (int i = 0; i < map.enemyBullets.size; i++)
-        {
-            EnemyBullet enemyBullet = map.enemyBullets.get(i);
-
-
-            if (enemyBullet.state == EnemyBullet.FLYING)
-            {
-                TextureRegion frame;
-
-                frame = this.enemyShotAnim.getKeyFrame(enemyBullet.stateTime, true);
-
-                batch.draw(frame, enemyBullet.pos.x, enemyBullet.pos.y, 0.5f, 0.5f,
-                        1, 1, 0.5f, 0.5f, enemyBullet.vel.angle());
-            }
-            else if (enemyBullet.state != EnemyBullet.DEAD)
-            {
-                TextureRegion frame;
-
-                frame = this.shotHitRight.getKeyFrame(enemyBullet.stateTime, false);
-
-
-                batch.draw(frame, enemyBullet.pos.x, enemyBullet.pos.y, 1, 1);
-
-                //explosionSound.play(0.5f);
             }
         }
     }
 
 
 
-    private void renderDrone()
-    {
-       //boolean swapped = false;
-       //TextureRegion frame;
 
-        for (int i = 0; i < map.drones.size; i++)
-        {
-            Drone drone = map.drones.get(i);
-
-            if (drone.state == Drone.FLYING)
-            {
-                if(drone.vel.x > 0 )
-                {
-                    //droneAnim.setPlayMode(Animation.PlayMode.NORMAL);
-                    TextureRegion frame = this.droneAnim.getKeyFrame(stateTime, false);
-                    batch.draw(frame, drone.pos.x, drone.pos.y, 0.5f, 0.5f, 1, 1, 2, 2, drone.vel.angle());
-                    map.drones.get(i).dir = Drone.RIGHT;
-
-                    //swapped = true;
-                }
-                else
-                {
-                    TextureRegion frame = this.droneReverseAnim.getKeyFrame(stateTime, false);
-                    batch.draw(frame, drone.pos.x, drone.pos.y, 0.5f, 0.5f, 1, 1, 2, 2, drone.vel.angle());
-
-                    //droneAnim.setPlayMode(Animation.PlayMode.REVERSED);
-
-                    map.drones.get(i).dir = Drone.LEFT;
-
-                    //swapped = true;
-                }
-
-               /* if( droneAnim.isAnimationFinished(map.drones.get(i).stateTime) && swapped && map.drones.get(i).dir == Drone.LEFT)
-                {
-                    droneAnim.setPlayMode(Animation.PlayMode.REVERSED);
-                    frame = this.droneAnim.getKeyFrame(drone.stateTime, false);
-                    map.drones.get(i).stateTime = 0.0f;
-                    swapped = false;
-                }
-                else
-                {
-                    frame = this.droneAnim.getKeyFrame(drone.stateTime, false);
-                }*/
-
-
-                //batch.draw(frame, drone.pos.x, drone.pos.y, 0.5f, 0.5f, 1, 1, 2, 2, drone.vel.angle());
-            }
-            else
-            {
-                TextureRegion frame = this.explosionAnim.getKeyFrame(drone.stateTime, false);
-                batch.draw(frame, drone.pos.x - 0.5f, drone.pos.y - 0.5f, 2, 2);
-            }
-        }
-    }
 
 
     private void renderEggTurret()
@@ -873,25 +650,10 @@ public class RenderMap extends Map
             }
         }
     }
-/*
-    private void renderCube () {
-        if (map.cube.state == Cube.FOLLOW) batch.draw(cube, map.cube.pos.x, map.cube.pos.y, 1.5f, 1.5f);
-        if (map.cube.state == Cube.FIXED)
-            batch.draw(cubeFixed.getKeyFrame(map.cube.stateTime, false), map.cube.pos.x, map.cube.pos.y, 1.5f, 1.5f);
-        if (map.cube.state == Cube.CONTROLLED) batch.draw(cubeControlled, map.cube.pos.x, map.cube.pos.y, 1.5f, 1.5f);
-    }
-
-*/
-    private void renderBuilding()
-    {
-        for (int i = 0; i < map.buildings.size; i++)
-        {
-            Building building = map.buildings.get(i);
-            batch.draw(this.building, building.bounds.x, building.bounds.y, 20, 40);
-        }
-    }
 
 
+
+    //Utilizes polymorphism inheritance to print all props
     private void renderProps()
     {
         for (int i = 0; i < map.props.size; i++)
@@ -942,31 +704,6 @@ public class RenderMap extends Map
     }
 
 
-
-
-
-
-    /*private void renderSpikes ()
-    {
-        for (int i = 0; i < map.spikes.size; i++)
-        {
-            if( map.spikes.get(i).active )
-            {
-                Spike spike = map.spikes.get(i);
-                batch.draw(spikes.getKeyFrame(map.alita.stateTime, true), spike.bounds.x, spike.bounds.y, 1, 1);
-            }
-
-        }
-    }*/
-
-    /*private void renderExit()
-    {
-        for (int i = 0; i < map.exits.size; i++)
-        {
-                Exit exit = map.exits.get(i);
-                batch.draw(exits.getKeyFrame(map.alita.stateTime, true), exit.bounds.x, exit.bounds.y, 1, 1);
-        }
-    }*/
 
 
     public void dispose ()
