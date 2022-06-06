@@ -243,7 +243,7 @@ public class Map
                 else if ((Player.state == Player.CROUCH_SHOOT) && alita.dir == Player.LEFT && alita.energy > 0)
                 {
                     pistolSound.play(0.2f);
-                    //casingDropSound.play(0.2f);
+                    
                     Bullet bullet = new Bullet(this, alita.pos.x, alita.pos.y + 0.5f, Player.LEFT);
                     bullets.add(bullet);
 
