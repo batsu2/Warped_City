@@ -66,11 +66,8 @@ public class Map
     Array<Prop> props = new Array<>();
 
 
-    //Controller controller = null;
-    //ControllerListener controllerListener;
 
     Dispenser activeDispenser = null;
-    //public Exit exit;
 
     public Map ()
     {
@@ -226,7 +223,7 @@ public class Map
                 if ((Player.state == Player.CROUCH_SHOOT) && alita.dir == Player.RIGHT && alita.energy > 0)
                 {
                     pistolSound.play(0.2f);
-                    //casingDropSound.play(0.2f);
+                    
                     Bullet bullet = new Bullet(this, alita.pos.x + 2.1f, alita.pos.y + 0.5f, Player.RIGHT);
                     bullets.add(bullet);
 
@@ -337,7 +334,6 @@ public class Map
 
         if(!Pause)
         {
-
             for (int i = 0; i < bullets.size; i++)
             {
                 Bullet bullet = bullets.get(i);
